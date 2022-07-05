@@ -8,7 +8,92 @@
     <%= link_to 'New product', new_product_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
 
-  <div class="min-w-full">
-    <%= render @products %>
-  </div>
+    <div class="bg-white">
+      <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Customers also purchased</h2>
+
+        <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <div class="group relative">
+            <% @products.each do |product|%>
+            <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
+              <%= image_tag product.image if product.image.attached?, alt: product.name, class: "w-full h-full object-center object-cover lg:w-full lg:h-full" %>
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700">
+                  <a href="#">
+                    <span aria-hidden="true" class="absolute inset-0"></span>
+                    <%= product.name %>
+                  </a>
+                </h3>
+                <p class="mt-1 text-sm text-gray-500"><%= product.description %></p>
+              </div>
+              <p class="text-sm font-medium text-gray-900"><%= product.price %></p>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
+
+<div class="flex flex-col">
+    <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="overflow-hidden">
+          <table class="min-w-full border text-center">
+            <thead class="border-b">
+              <tr>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 border-r">
+                  #
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 border-r">
+                  Image
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 border-r">
+                  Name
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 border-r">
+                  Description
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                  Price
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                  Actions
+                </th>
+              </tr>
+            </thead>  
+            <tbody>
+              <% @products.each do |product|%>
+              <tr class="border-b">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
+                  <%= product.id %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
+                  <%= image_tag product.image if product.image.attached? %>
+                </td>
+                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                  <%= product.name %>
+                </td>
+                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                  <%= product.description %>
+                </td>
+                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                  <%= product.price %>
+                </td>
+                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                  <%= form_with(url: cart_add_path) do |f| %>
+                    <%= f.hidden_field :id, value: product.id %>
+                    <%= f.number_field :quantity, value: 0, min: 1, class: "border-none text-end" %>
+                    <%= f.submit "Add To Cart" %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
