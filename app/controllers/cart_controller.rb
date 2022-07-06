@@ -1,6 +1,7 @@
 class CartController < ApplicationController
   def show
     @render_cart = false
+    @products = @cart.orderables.map(&:product)
   end
 
   def add
